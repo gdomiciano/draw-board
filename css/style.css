@@ -9,6 +9,7 @@
 body {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 16px;
+    /* overflow: hidden; */
 }
 
 [class*="brand"]{
@@ -68,5 +69,5 @@ body {
 
 .Board-canvas{
     width: 100%;
-    height: 100%;
+    height: calc(100% - 80px);
 }
