@@ -15,12 +15,6 @@ let circleInfo = {};
 canvas.width = board.clientWidth || board.offsetWidth;
 canvas.height = board.clientHeight || board.offsetHeight;
 
-function resetBoard() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    info.points.length = 0;
-    canvas.addEventListener('mousedown', handleMouseClick);
-}
-
 const  handleMouseClick = (e) => {
     let x = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
     let y = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
@@ -98,7 +92,7 @@ function drawPoint(cx, cy, radius, color) {
     context.fill();
 }
 
-function showInfo(info){
+function showInfo(){
     console.log(info)
     document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
     document.querySelector('.Info-content--pointTwo').textContent = `${info.points[1].x}, ${info.points[1].y}`;
@@ -107,4 +101,28 @@ function showInfo(info){
     document.querySelector('.Info-content--circleArea').textContent += ` ${info.circle.area}`;
     document.querySelector('.Info-none').classList.add('u-hidden');
     document.querySelector('.Info-content').classList.remove('u-hidden');
+}
+
+
+function resetBoard() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    clearInfo();
+    canvas.addEventListener('mousedown', handleMouseClick);
+}
+
+
+function clearInfo(){
+
+    document.querySelector('.Info-none').classList.remove('u-hidden');
+    document.querySelector('.Info-content').classList.add('u-hidden');
+    console.log(info.points);
+    info.points.length = 0;
+    delete info.parallelogram;
+    delete info.circle;
+    console.log(info)
+    document.querySelector('.Info-content--pointOne').textContent = '';
+    document.querySelector('.Info-content--pointTwo').textContent = '';
+    document.querySelector('.Info-content--pointThree').textContent = '';
+    document.querySelector('.Info-content--parallelogramArea').textContent = 'Parallelogram: ';
+    document.querySelector('.Info-content--circleArea').textContent = 'Circle: ';
 }
