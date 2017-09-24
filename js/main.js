@@ -12,9 +12,13 @@ const info = {
 let parallelogramInfo = {};
 let circleInfo = {};
 
+//All ABout initial setups
 canvas.width = board.clientWidth || board.offsetWidth;
 canvas.height = board.clientHeight || board.offsetHeight;
+canvas.addEventListener('mousedown', handleMouseClick);
+resetButton.addEventListener('mousedown', resetBoard);
 
+// All About handleing events
 const  handleMouseClick = (e) => {
     let x = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
     let y = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
@@ -36,8 +40,7 @@ const  handleMouseClick = (e) => {
     }
 }
 
-canvas.addEventListener('mousedown', handleMouseClick);
-resetButton.addEventListener('mousedown', resetBoard);
+// All about drawing
 
 function drawParallelogram(points) {
     console.log(points)
@@ -92,6 +95,7 @@ function drawPoint(cx, cy, radius, color) {
     context.fill();
 }
 
+// All about show info
 function showInfo(){
     console.log(info)
     document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
@@ -103,6 +107,7 @@ function showInfo(){
     document.querySelector('.Info-content').classList.remove('u-hidden');
 }
 
+// All About Reset
 
 function resetBoard() {
     context.clearRect(0, 0, canvas.width, canvas.height);
