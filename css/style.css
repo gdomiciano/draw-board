@@ -13,6 +13,60 @@ body {
 
 [class*="brand"]{
     font-family: 'Megrim', cursive;
-    font-size: 140px
+    font-size: 60px
 }
 
+.Header {
+    width: 100%;
+    background-color: #cccccc;
+    border-bottom: 1px #999999 solid;
+    padding: 10px;
+    max-height: 80px;
+    text-align: center;
+}
+
+.Header-brand {
+    display: inline-block;
+    color:#333;
+}
+
+.Header-logo {
+    height: 100%;
+    vertical-align: top;
+}
+
+.Info {
+    float: left;
+    display: inline-block;
+    width: 15%;
+}
+
+.Board {
+    background-color: #eeeeee;
+    display: inline-block;
+    width: 85%;
+
+    background-color: #f1f2f3; 
+    background-image: 
+      -webkit-linear-gradient(0deg, transparent .05em, rgba(0,0,0,.05) .05em, rgba(0,0,0,.05) .125000em, transparent .125000em),
+      -webkit-linear-gradient(rgba(0,0,0,.05) .062500em, transparent .062500em);
+    background-image: 
+      -moz-linear-gradient(0deg, transparent .05em, rgba(0,0,0,.05) .05em, rgba(0,0,0,.05) .125000em, transparent .125000em),
+      -moz-linear-gradient(rgba(0,0,0,.05) .062500em, transparent .062500em);
+    background-image: 
+      -ms-linear-gradient(0deg, transparent .05em, rgba(0,0,0,.05) .05em, rgba(0,0,0,.05) .125000em, transparent .125000em),
+      -ms-linear-gradient(rgba(0,0,0,.05) .062500em, transparent .062500em);
+    background-image: 
+      -o-linear-gradient(0deg, transparent .05em, rgba(0,0,0,.05) .05em, rgba(0,0,0,.05) .125000em, transparent .125000em),
+      -o-linear-gradient(rgba(0,0,0,.05) .062500em, transparent .062500em);
+    background-image: 
+      linear-gradient(0deg, transparent .05em, rgba(0,0,0,.05) .05em, rgba(0,0,0,.05) .125000em, transparent .125000em),
+      inear-gradient(rgba(0,0,0,.05) .062500em, transparent .062500em);
+    background-size: .75em .75em;  
+    background-position: 0 -0.5em;
+}
+
+.Board-canvas{
+    width: 100%;
+    height: 100%;
+}
