@@ -8,13 +8,23 @@
 
 body {
     font-family: 'Josefin Sans', sans-serif;
-    font-size: 16px;
+    font-size: 18px;
     /* overflow: hidden; */
 }
 
 [class*="brand"]{
     font-family: 'Megrim', cursive;
     font-size: 60px
+}
+
+[class*="title"] {
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 40px;
+}
+
+.u-hidden {
+    display: none;
 }
 
 .Header {
@@ -38,14 +48,43 @@ body {
 
 .Info {
     float: left;
-    display: inline-block;
-    width: 15%;
+    width: 20%;
+    padding: 20px 10px;
+    position: relative;
+    overflow: hidden;
+    height: calc(100% - 80px);
+    line-height: 20px;
+
+}
+.Info-content--list{
+    margin-bottom: 25px;
+}
+
+li[class^="Info-content"] {
+    list-style: inside;
+}
+
+li[class^="Info-content--point"] {
+    list-style-type: decimal;
+}
+
+.Reset{
+    position: absolute;
+    bottom: 20px;
+    width: calc(100% - 20px);;
+    text-align: center;
+    color: #ffffff;
+    font-size: 20px;
+    line-height: 40px;
+    background-color: red;
+    border: none;
+    border-radius: 10px;
 }
 
 .Board {
     background-color: #eeeeee;
     display: inline-block;
-    width: 85%;
+    width: 80%;
     height: calc(100% - 80px);
 
     background-color: #f1f2f3;
