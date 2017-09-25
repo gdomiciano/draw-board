@@ -6,14 +6,24 @@ const blue = '#005293';
 const yellow = '#FECB00';
 const pointRadius = 5.5;
 const pointColor = '#FF0000';
+
+let centerX = null;
+let centerY = null;
+let base = null;
+let AC = null;
+let BD = null;
+let area = null;
+let height = null;
+let radius = null;
+
 const info = {
     points: []
 };
 let parallelogramInfo = {};
 let circleInfo = {};
-// **** Keep track of state! ****
 
-let valid = false; // when set to false, the canvas will redraw everything
+//variables for draggable points
+
 const shapes = [];  // the collection of things to be drawn
 let dragging = false; // Keep track of when we are dragging
 // the current selected object. In the future we could turn const into an array for multiple selection
@@ -45,7 +55,7 @@ const  handleMouseClick = (e) => {
     });
 
     drawPoint(position.x, position.y, pointRadius, pointColor);
-    context.fillText(info.points.length, position.x, position.y-25, 80);
+    context.fillText(info.points.length, position.x, position.y-15, 80);
     if (info.points.length === 3) {
         console.log(info);
         drawParallelogram(info.points);
@@ -81,7 +91,7 @@ const mouseDown = (e) => {
             dragoffy = my - mySel.y;
             dragging = true;
             selection = mySel;
-            valid = false;
+            
             return;
         }
     }
@@ -89,7 +99,7 @@ const mouseDown = (e) => {
     // If there was an object selected, we deselect it
     if (selection) {
         selection = null;
-        valid = false; // Need to clear the old selection border
+
     }
 }
 const mouseMove = (e) => {
@@ -105,7 +115,7 @@ const mouseMove = (e) => {
         selection.y = mouse.y - dragoffy;
         console.log('selection', selection);
         updateView(selection, updatePoint);
-        valid = false; // Something's dragging so we must redraw
+        
     }
 
 }
@@ -116,8 +126,15 @@ const mouseUp = (e) => {
 
 // All about drawing
 function updateView(newPoint, index){
+    clearInfo();
     info.points[index] = newPoint;
 
+    for(i=0; i < info.points.length - 1; i++){
+        // text = i++;
+        console.log('i', i);
+        drawPoint(info.points[i].x, info.points[i].y, pointRadius, pointColor);
+        context.fillText(i+1, info.points[i].x, info.points[i].y-15, 80);
+    }
     context.strokeStyle = blue;
     context.beginPath();
     context.moveTo(info.points[0].x, info.points[0].y);
@@ -127,6 +144,10 @@ function updateView(newPoint, index){
     context.closePath();
     context.lineWidth=3;
     context.stroke();
+
+    info.parallelogram = createInfo(info.points);
+    drawCircle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
+
 }
 
 function drawParallelogram(points) {
@@ -135,16 +156,7 @@ function drawParallelogram(points) {
         x: points[0].x + points[2].x -points[1].x,
         y: points[0].y + points[2].y -points[1].y,
     });
-    const centerX = (points[0].x + points[1].x +points[2].x + points[3].x) / 4;
-    const centerY = (points[0].y + points[1].y +points[2].y + points[3].y) / 4;
-    // const // base = Math.sqrt(Math.pow((points[1].x - points[0].x),2)+Math.pow((points[1].y - [points[0].y]),2));
-    // const // base = Math.sqrt(Math.pow((points[3].x - points[0].x),2)+Math.pow((points[3].y - [points[0].y]),2));
-    const base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2)+Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2)+Math.pow((points[1].y - [points[0].y]), 2)));
-    const AC = Math.sqrt(Math.pow((points[3].x - points[0].x),2)+Math.pow((points[3].y - [points[0].y]),2));
-    const BD = Math.sqrt(Math.pow((points[2].x - points[1].x),2)+Math.pow((points[2].y - [points[1].y]),2));
-    const area = (AC * BD)/2;
-    const height = area/base;
-    const radius = (height/2).toFixed();
+
 
     context.strokeStyle = blue;
     context.beginPath();
@@ -155,12 +167,9 @@ function drawParallelogram(points) {
     context.closePath();
     context.lineWidth=3;
     context.stroke();
-    
-    info.parallelogram = {
-        area: area.toFixed(),
-    }
-    // console.log(area);
-    drawCircle(centerX, centerY, radius, yellow);
+
+    info.parallelogram = createInfo(info.points);
+    drawCircle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
 }
 
 function drawCircle(cx, cy, radius, color) {
@@ -182,10 +191,30 @@ function drawPoint(cx, cy, radius, color) {
     context.fill();
     
     // this.shapes.push(shape);
-    // this.valid = false;
+    // this.
 }
 
 // All about show info
+function createInfo(points) {
+    centerX = (points[0].x + points[1].x +points[2].x + points[3].x) / 4;
+    centerY = (points[0].y + points[1].y +points[2].y + points[3].y) / 4;
+    base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2)+Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2)+Math.pow((points[1].y - [points[0].y]), 2)));
+    AC = Math.sqrt(Math.pow((points[3].x - points[0].x),2)+Math.pow((points[3].y - [points[0].y]),2));
+    BD = Math.sqrt(Math.pow((points[2].x - points[1].x),2)+Math.pow((points[2].y - [points[1].y]),2));
+    area = ((AC * BD)/2).toFixed();
+    height = area/base;
+    radius = (height/2).toFixed();
+    return {
+        centerX: centerX,
+        centerY: centerY,
+        base: base,
+        AC: AC,
+        BD: BD,
+        area: area,
+        height: height,
+        radius: radius,
+    };
+}
 function showInfo(){
     console.log(info)
     document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
@@ -201,6 +230,9 @@ function showInfo(){
 
 function resetBoard() {
     context.clearRect(0, 0, canvas.width, canvas.height);
+    info.points.length = 0;
+    delete info.parallelogram;
+    delete info.circle;
     clearInfo();
     canvas.removeEventListener('mousedown', mouseDown, true);
     canvas.removeEventListener('mousemove', mouseMove, true);
@@ -214,11 +246,6 @@ function clearInfo(){
     
     document.querySelector('.Info-none').classList.remove('u-hidden');
     document.querySelector('.Info-content').classList.add('u-hidden');
-    console.log(info.points);
-    info.points.length = 0;
-    delete info.parallelogram;
-    delete info.circle;
-    console.log(info)
     document.querySelector('.Info-content--pointOne').textContent = '';
     document.querySelector('.Info-content--pointTwo').textContent = '';
     document.querySelector('.Info-content--pointThree').textContent = '';
