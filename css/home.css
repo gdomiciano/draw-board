@@ -1,51 +1,3 @@
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Josefin Sans', sans-serif;
-    font-size: 18px;
-    /* overflow: hidden; */
-}
-
-[class*="brand"]{
-    font-family: 'Megrim', cursive;
-    font-size: 60px
-}
-
-[class*="title"] {
-    font-weight: 700;
-    font-size: 26px;
-    line-height: 40px;
-}
-
-.u-hidden {
-    display: none;
-}
-
-.Header {
-    width: 100%;
-    background-color: #cccccc;
-    border-bottom: 1px #999999 solid;
-    padding: 10px;
-    max-height: 80px;
-    text-align: center;
-}
-
-.Header-brand {
-    display: inline-block;
-    color:#333;
-}
-
-.Header-logo {
-    height: 100%;
-    vertical-align: top;
-}
-
 .Info {
     float: left;
     width: 20%;
@@ -68,17 +20,9 @@ li[class^="Info-content--point"] {
     list-style-type: decimal;
 }
 
-.Reset{
+.Button--reset{
     position: absolute;
-    bottom: 20px;
-    width: calc(100% - 20px);;
-    text-align: center;
-    color: #ffffff;
-    font-size: 20px;
-    line-height: 40px;
-    background-color: red;
-    border: none;
-    border-radius: 10px;
+    width: calc(100% - 20px);
 }
 
 .Board {
@@ -106,5 +50,3 @@ li[class^="Info-content--point"] {
     background-size: .75em .75em;
     background-position: 0 -0.5em;
 }
-
-.Board-canvas{}

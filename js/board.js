@@ -1,5 +1,5 @@
 const board = document.querySelector('.Board');
-const resetButton = document.querySelector('.Reset');
+const resetButton = document.querySelector('.Button--reset');
 const canvas = document.getElementById('canvas');
 const context = canvas.getContext('2d');
 const blue = '#005293';
@@ -19,18 +19,14 @@ let radius = null;
 const info = {
     points: []
 };
-let parallelogramInfo = {};
-let circleInfo = {};
 
 //variables for draggable points
-
-const shapes = [];  // the collection of things to be drawn
 let dragging = false; // Keep track of when we are dragging
 // the current selected object. In the future we could turn const into an array for multiple selection
 let selection = null;
 let dragoffx = 0; // See mousedown and mousemove events for explanation
 let dragoffy = 0;
-let updatePoint = null
+let updatePoint = null;
 
 //All ABout initial setups
 canvas.width = board.clientWidth || board.offsetWidth;
@@ -43,12 +39,12 @@ const getMouse = (e) => {
 
     x -= canvas.offsetLeft;
     y -= canvas.offsetTop;
-    // console.log(x,y)
+
     return {x: x, y: y};
-}
+};
 
 const  handleMouseClick = (e) => {
-    const position = getMouse(e)
+    const position = getMouse(e);
     info.points.push({
         x: position.x,
         y:position.y,
@@ -57,7 +53,7 @@ const  handleMouseClick = (e) => {
     drawPoint(position.x, position.y, pointRadius, pointColor);
     context.fillText(info.points.length, position.x, position.y-15, 80);
     if (info.points.length === 3) {
-        console.log(info);
+
         drawParallelogram(info.points);
         canvas.removeEventListener('mousedown', handleMouseClick);
         // Up, down, and move are for dragging
@@ -65,24 +61,23 @@ const  handleMouseClick = (e) => {
         canvas.addEventListener('mousemove', mouseMove, true);
         canvas.addEventListener('mouseup', mouseUp, true);
     }
-}
+};
 
-Object.prototype.contains = function(mx, my, i) {
+Object.prototype.contains = function(mx, my) {
     // All we have to do is make sure the Mouse X,Y fall in the area between
     // the shape's X and (X + Width) and its Y and (Y + Height)
-    console.log('return', (this.x <= mx) && (this.x + pointRadius*2 >= mx) && (this.y <= my) && (this.y + pointRadius*2 >= my));
     return (this.x <= mx) && (this.x + pointRadius*2 >= mx) && (this.y <= my) && (this.y + pointRadius*2 >= my);
-}
+};
+
 const mouseDown = (e) => {
-    console.log('got mouse down event', e)
     var mouse = getMouse(e);
     var mx = mouse.x;
     var my = mouse.y;
     var shapes = info.points;
     var l = shapes.length;
     for (var i = l-2; i >= 0; i--) {
-        // console.log(shapes[i]);
-        if (shapes[i].contains(mx, my, i)) {
+
+        if (shapes[i].contains(mx, my)) {
             var mySel = shapes[i];
             // Keep track of where in the object we clicked
             // so we can move it smoothly (see mousemove)
@@ -91,7 +86,7 @@ const mouseDown = (e) => {
             dragoffy = my - mySel.y;
             dragging = true;
             selection = mySel;
-            
+
             return;
         }
     }
@@ -103,8 +98,6 @@ const mouseDown = (e) => {
     }
 }
 const mouseMove = (e) => {
-    // console.log('got mouse move event', e)
-
     if (dragging){
 
     context.clearRect(0, 0, canvas.width, canvas.height);
@@ -113,14 +106,13 @@ const mouseMove = (e) => {
         // from where we clicked. Thats why we saved the offset and use it here
         selection.x = mouse.x - dragoffx;
         selection.y = mouse.y - dragoffy;
-        console.log('selection', selection);
+
         updateView(selection, updatePoint);
-        
+
     }
 
 }
 const mouseUp = (e) => {
-    // console.log('got mouse up event', e)
     dragging = false;
 }
 
@@ -130,8 +122,6 @@ function updateView(newPoint, index){
     info.points[index] = newPoint;
 
     for(i=0; i < info.points.length - 1; i++){
-        // text = i++;
-        console.log('i', i);
         drawPoint(info.points[i].x, info.points[i].y, pointRadius, pointColor);
         context.fillText(i+1, info.points[i].x, info.points[i].y-15, 80);
     }
@@ -151,7 +141,6 @@ function updateView(newPoint, index){
 }
 
 function drawParallelogram(points) {
-    console.log(points)
     points.push({
         x: points[0].x + points[2].x -points[1].x,
         y: points[0].y + points[2].y -points[1].y,
@@ -177,7 +166,6 @@ function drawCircle(cx, cy, radius, color) {
     context.beginPath();
     context.arc(cx, cy, radius, 0, Math.PI * 2, true);
     context.stroke();
-    console.log(radius);
     info.circle = {
         area: (Math.PI*Math.pow(radius,2)).toFixed(),
     };
@@ -216,7 +204,6 @@ function createInfo(points) {
     };
 }
 function showInfo(){
-    console.log(info)
     document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
     document.querySelector('.Info-content--pointTwo').textContent = `${info.points[1].x}, ${info.points[1].y}`;
     document.querySelector('.Info-content--pointThree').textContent = `${info.points[2].x}, ${info.points[2].y}`;

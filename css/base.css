@@ -1,0 +1,104 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 20px;
+    /* overflow: hidden; */
+}
+
+a {
+    text-decoration: none;
+}
+
+[class*="brand"]{
+    font-family: 'Megrim', cursive;
+    font-size: 60px
+}
+
+[class*="title"] {
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 40px;
+}
+
+[class*="Page-title"] {
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+[class^="Button"] {
+    background-color: red;
+    bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+    display: block;
+}
+
+.u-hidden {
+    display: none;
+}
+
+.Header {
+    width: 100%;
+    background-color: #cccccc;
+    border-bottom: 1px #999999 solid;
+    padding: 10px;
+    max-height: 80px;
+}
+
+.Header-brand {
+    display: inline-block;
+    color:#333;
+}
+
+.Header-logo {
+    height: 100%;
+    vertical-align: top;
+}
+
+.Navigation{
+    height: 50px;
+    position: relative;
+    float: right;
+}
+
+.Navigation-item{
+    display: inline-block;
+    list-style: none;
+    padding: 10px;
+    border-left: 1px solid #666;
+}
+.Navigation-item:first-child{
+    border: none;
+}
+
+.Navigation-item--link {
+    color: #005293;
+    font-size: 30px;
+}
+
+.Navigation-item--link:hover {
+    color:#333
+}
+
+.Navigation-item--link:active {
+    text-decoration: overline;
+}
+
+.Navigation-item--icon {
+    width: 30px;
+    vertical-align: middle;
+}
