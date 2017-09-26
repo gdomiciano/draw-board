@@ -32,7 +32,7 @@ The touch screen support is not only available on tablets and smarphone, but als
 
  - **Kanban Board:** [GitHub Projects](https://github.com/gdomiciano/draw-board/projects/1)
  - **Text Editor:** [VS Code](https://code.visualstudio.com/)
- - **Control Version:** [GitHub](https://github.com/)
+ - **Version Control:** [GitHub](https://github.com/)
  - **Deploy:** [GitHub Pages](https://pages.github.com/)
 
 
