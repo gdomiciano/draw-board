@@ -13,6 +13,7 @@ body {
 
 a {
     text-decoration: none;
+    color: #005293;
 }
 
 p,
@@ -99,7 +100,6 @@ li {
 }
 
 .Navigation-item--link {
-    color: #005293;
     font-size: 30px;
 }
 
@@ -132,9 +132,9 @@ li {
     }
 
     [class*="brand"]{
-        font-size: 40px;
+        font-size: 38px;
     }
-    
+
     [class*="title"] {
         font-size: 35px;
     }
@@ -148,11 +148,53 @@ li {
         padding: 5px;
     }
 
+    .Navigation-item {
+        padding: 5px;
+    }
     .Navigation-item--link {
-        font-size: 25px;
+        font-size: 24px;
     }
 
     .Navigation-item--icon {
-        width: 25px;
+        width: 24px;
     }
+}
+
+@media screen and (max-width: 640px) {
+    body {
+        font-size: 18px;
+    }
+
+    p,
+    li {
+        line-height: 30px;
+    }
+
+    [class*="brand"]{
+        font-size: 34px;
+    }
+
+    [class*="title"] {
+        font-size: 25px;
+    }
+
+    .Header {
+        max-height: 60px;
+        padding: 5px;
+    }
+
+    .Navigation-item--link {
+        font-size: 20px;
+    }
+
+    .Navigation-item--icon {
+        width: 20px;
+    }
+}
+
+@media screen and (orientation: portrait) and (max-width: 767px){
+     .Navigation,
+     .Info {
+          display: none;
+     }
 }

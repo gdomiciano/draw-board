@@ -2,10 +2,10 @@
     float: left;
     width: 25%;
     padding: 20px 10px;
-    position: relative;
-    overflow: hidden;
+    overflow: scroll;
     height: calc(100% - 80px);
     line-height: 20px;
+
 
 }
 .Info-content--list{
@@ -22,7 +22,9 @@ li[class^="Info-content--point"] {
 
 .Button--reset{
     position: absolute;
-    width: calc(100% - 20px);
+    right: 10px;
+    bottom: 10px;
+    width: calc(30% - 20px);
 }
 
 .Board {
@@ -51,3 +53,8 @@ li[class^="Info-content--point"] {
     background-position: 0 -0.5em;
 }
 
+@media screen and (orientation: portrait) and (max-width: 767px){
+    .Board {
+        width: 100%;
+    }
+}

@@ -1,0 +1,22 @@
+.AboutPage-text {
+    margin-bottom: 20px;
+}
+
+.Aboutpage-list {
+    overflow: hidden;
+    text-align: center;
+}
+
+.AboutPage-item {
+    display: inline-block;
+    width: 20%;
+    list-style: none;
+    text-align: center;
+}
+
+.AboutPage-toolsList {
+    margin: 0 0 40px 40px;
+}
+.AboutPage-toolsList--item {
+    list-style: inside circle
+}
