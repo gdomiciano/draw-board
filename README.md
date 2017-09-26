@@ -1,6 +1,8 @@
 # draw-board
 Draw a parallelogram based on user's click.
 
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/desktop.png?raw=true)
+
 ## How to use **DrawBoard**
 
 The goal of DrawBoard is create a parallelogram with an inner circle.
@@ -32,3 +34,15 @@ The touch screen support is not only available on tablets and smarphone, but als
  - **Text Editor:** [VS Code](https://code.visualstudio.com/)
  - **Control Version:** [GitHub](https://github.com/)
  - **Deploy:** [GitHub Pages](https://pages.github.com/)
+
+
+ ## Resolutions
+
+ ### Ipad:
+
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/ipad-portrait.png?raw=true)
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/tablet-landscape.png?raw=true)
+
+### Smartphone (Galaxy Nexus 5):
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/mobile-portrait.png?raw=true)
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/mobile-landscape.png?raw=true)
