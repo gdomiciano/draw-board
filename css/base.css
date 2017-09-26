@@ -65,6 +65,10 @@ li {
     display: none;
 }
 
+.is-active {
+    box-shadow: #999 0px 0px 30px;
+}
+
 .Header {
     width: 100%;
     background-color: #cccccc;
@@ -105,10 +109,6 @@ li {
 
 .Navigation-item--link:hover {
     color:#333
-}
-
-.Navigation-item--link:active {
-    text-decoration: overline;
 }
 
 .Navigation-item--icon {
