@@ -1,16 +1,10 @@
-.TutorialPage--Wrap {
-    width: 70%;
-    margin: 40px auto;
-}
 .TutorialPage-intro  {
     text-align: center;
     margin-bottom: 40px;
 }
 
 .TutorialPage-list {
-    width: 80%;
-    margin: 0px auto 40px;
-
+    width: 60%;
 }
 
 .TutorialPage-item--step{
@@ -18,7 +12,10 @@
     list-style: inside decimal;
 }
 
-.Button--back{
-    width: 250px;
-    margin: 0px auto;
+
+@media screen and (max-width: 768px) {
+    .TutorialPage-list {
+        width: 80%;
+    }
+
 }
