@@ -8,6 +8,7 @@
     const yellow = '#FECB00';
     const pointRadius = 5.5;
     const pointColor = '#FF0000';
+    const textPos = 15;
 
     // Vars for calc
     let centerX = null;
@@ -56,12 +57,12 @@
     const handleMouseClick = (e) => {
         const position = getMouse(e);
         info.points.push({
-            x: position.x,
-            y:position.y,
+            x: position.x, 
+            y:position.y, 
         });
 
         drawPoint(position.x, position.y, pointRadius, pointColor);
-        context.fillText(info.points.length, position.x, position.y-15, 80);
+        context.fillText(info.points.length, position.x, position.y - textPos, 80);
 
         if (info.points.length === 3) {
             drawParallelogram(info.points);
@@ -79,7 +80,7 @@
         var my = mouse.y;
         var shapes = info.points;
         var l = shapes.length;
-        for (var i = l-2; i >= 0; i--) {
+        for (var i = l - 2; i >= 0; i--) {
 
             if (shapes[i].contains(mx, my)) {
                 var mySel = shapes[i];
@@ -123,7 +124,7 @@
 
         for(let i = 0; i < info.points.length - 1; i++) {
             drawPoint(info.points[i].x, info.points[i].y, pointRadius, pointColor);
-            context.fillText(i + 1, info.points[i].x, info.points[i].y-15, 80);
+            context.fillText(i + 1, info.points[i].x, info.points[i].y - textPos, 80);
         }
 
         context.strokeStyle = blue;
@@ -168,9 +169,9 @@
         context.arc(cx, cy, radius, 0, Math.PI * 2, true);
         context.stroke();
         info.circle = {
-            area: (Math.PI*Math.pow(radius,2)).toFixed(),
+            area: (Math.PI*Math.pow(radius, 2)).toFixed(), 
         };
-        
+
         showInfo(info);
     };
 
@@ -183,23 +184,23 @@
 
     // Info
     const createInfo = (points) => {
-        centerX = (points[0].x + points[1].x +points[2].x + points[3].x) / 4;
-        centerY = (points[0].y + points[1].y +points[2].y + points[3].y) / 4;
-        base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2)+Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2)+Math.pow((points[1].y - [points[0].y]), 2)));
-        AC = Math.sqrt(Math.pow((points[3].x - points[0].x),2)+Math.pow((points[3].y - [points[0].y]),2));
-        BD = Math.sqrt(Math.pow((points[2].x - points[1].x),2)+Math.pow((points[2].y - [points[1].y]),2));
+        centerX = (points[0].x + points[1].x  + points[2].x + points[3].x) / 4;
+        centerY = (points[0].y + points[1].y  + points[2].y + points[3].y) / 4;
+        base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
+        AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
+        BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
         area = ((AC * BD)/2).toFixed();
         height = area/base;
         radius = (height/2).toFixed();
         return {
             centerX: centerX,
-            centerY: centerY,
-            base: base,
-            AC: AC,
-            BD: BD,
-            area: area,
-            height: height,
-            radius: radius,
+            centerY: centerY, 
+            base: base, 
+            AC: AC, 
+            BD: BD, 
+            area: area, 
+            height: height, 
+            radius: radius, 
         };
     };
 
