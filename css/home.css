@@ -5,8 +5,6 @@
     overflow: scroll;
     height: calc(100% - 80px);
     line-height: 20px;
-
-
 }
 .Info-content--list{
     margin-bottom: 25px;

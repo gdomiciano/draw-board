@@ -99,6 +99,7 @@ li {
     padding: 10px;
     border-left: 1px solid #666;
 }
+
 .Navigation-item:first-child{
     border: none;
 }
@@ -193,8 +194,8 @@ li {
 }
 
 @media screen and (orientation: portrait) and (max-width: 767px){
-     .Navigation,
-     .Info {
-          display: none;
-     }
+    .Navigation,
+    .Info {
+        display: none;
+    }
 }

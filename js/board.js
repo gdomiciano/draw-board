@@ -1,5 +1,5 @@
 {
-    // Genetal vars
+    // General vars
     const board = document.querySelector('.Board');
     const resetButton = document.querySelector('.Button--reset');
     const canvas = document.getElementById('canvas');
@@ -20,7 +20,7 @@
     let height = null;
     let radius = null;
 
-    //Var for Info
+    // Var for Info
     const info = {
         points: []
     };
@@ -37,8 +37,8 @@
     canvas.height = board.clientHeight || board.offsetHeight;
 
     // Check if click coordnates contain a dot
-    Object.prototype.contains = function(mx, my) {
-        return (this.x <= mx) && (this.x + pointRadius*2 >= mx) && (this.y <= my) && (this.y + pointRadius*2 >= my);
+    Object.prototype.contains = function(mouseX, mouseY) {
+        return (this.x <= mouseX) && (this.x + pointRadius * 2 >= mouseX) && (this.y <= mouseY) && (this.y + pointRadius * 2 >= mouseY);
     };
 
     // User Interaction
@@ -57,8 +57,8 @@
     const handleMouseClick = (e) => {
         const position = getMouse(e);
         info.points.push({
-            x: position.x, 
-            y:position.y, 
+            x: position.x,
+            y:position.y,
         });
 
         drawPoint(position.x, position.y, pointRadius, pointColor);
@@ -76,17 +76,17 @@
     // get the initial click moment and check it this click is on a dot
     const mouseDown = (e) => {
         var mouse = getMouse(e);
-        var mx = mouse.x;
-        var my = mouse.y;
+        var mouseX = mouse.x;
+        var mouseY = mouse.y;
         var shapes = info.points;
         var l = shapes.length;
         for (var i = l - 2; i >= 0; i--) {
 
-            if (shapes[i].contains(mx, my)) {
+            if (shapes[i].contains(mouseX, mouseY)) {
                 var mySel = shapes[i];
                 updatePoint = i;
-                dragoffx = mx - mySel.x;
-                dragoffy = my - mySel.y;
+                dragoffx = mouseX - mySel.x;
+                dragoffy = mouseY - mySel.y;
                 dragging = true;
                 selection = mySel;
                 return;
@@ -134,7 +134,7 @@
         context.lineTo(info.points[2].x, info.points[2].y);
         context.lineTo(info.points[3].x, info.points[3].y);
         context.closePath();
-        context.lineWidth=3;
+        context.lineWidth = 3;
         context.stroke();
 
         info.parallelogram = createInfo(info.points);
@@ -145,8 +145,8 @@
     // Draw
     const drawParallelogram = (points) => {
         points.push({
-            x: points[0].x + points[2].x -points[1].x,
-            y: points[0].y + points[2].y -points[1].y,
+            x: points[0].x + points[2].x - points[1].x,
+            y: points[0].y + points[2].y - points[1].y,
         });
 
         context.strokeStyle = blue;
@@ -156,7 +156,7 @@
         context.lineTo(points[2].x, points[2].y);
         context.lineTo(points[3].x, points[3].y);
         context.closePath();
-        context.lineWidth=3;
+        context.lineWidth = 3;
         context.stroke();
 
         info.parallelogram = createInfo(info.points);
@@ -164,12 +164,12 @@
     };
 
     const drawCircle = (cx, cy, radius, color) => {
-        context.strokeStyle=color;
+        context.strokeStyle = color;
         context.beginPath();
         context.arc(cx, cy, radius, 0, Math.PI * 2, true);
         context.stroke();
         info.circle = {
-            area: (Math.PI*Math.pow(radius, 2)).toFixed(), 
+            area: (Math.PI * Math.pow(radius, 2)).toFixed(),
         };
 
         showInfo(info);
@@ -184,23 +184,23 @@
 
     // Info
     const createInfo = (points) => {
-        centerX = (points[0].x + points[1].x  + points[2].x + points[3].x) / 4;
-        centerY = (points[0].y + points[1].y  + points[2].y + points[3].y) / 4;
+        centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
+        centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
         base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
         AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
         BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
         area = ((AC * BD)/2).toFixed();
-        height = area/base;
+        height = area / base;
         radius = (height/2).toFixed();
         return {
             centerX: centerX,
-            centerY: centerY, 
-            base: base, 
-            AC: AC, 
-            BD: BD, 
-            area: area, 
-            height: height, 
-            radius: radius, 
+            centerY: centerY,
+            base: base,
+            AC: AC,
+            BD: BD,
+            area: area,
+            height: height,
+            radius: radius,
         };
     };
 

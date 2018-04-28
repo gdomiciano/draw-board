@@ -38,9 +38,9 @@ The touch screen support is not only available on tablets and smarphone, but als
 
  ## Resolutions
 
- ### Ipad:
+ ### Tablet:
 
-![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/ipad-portrait.png?raw=true)
+![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/tablet-portrait.png?raw=true)
 ![image](https://github.com/gdomiciano/draw-board/blob/develop/assets/screenshots/tablet-landscape.png?raw=true)
 
 ### Smartphone (Galaxy Nexus 5):
