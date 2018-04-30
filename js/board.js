@@ -56,21 +56,25 @@
     // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
     const handleMouseClick = (e) => {
         const position = getMouse(e);
-        info.points.push({
-            x: position.x,
-            y:position.y,
-        });
 
-        drawPoint(position.x, position.y, pointRadius, pointColor);
-        context.fillText(info.points.length, position.x, position.y - textPos, 80);
-
+        if(info.points.length <= 3){
+            info.points.push({
+                x: position.x,
+                y: position.y,
+            });
+            circle(position.x, position.y, pointRadius, pointColor);
+            context.fill();
+            context.fillText(info.points.length, position.x, position.y - textPos, 80);
+        }
         if (info.points.length === 3) {
-            drawParallelogram(info.points);
+            parallelogram(info.points, blue);
+
             canvas.removeEventListener('mousedown', handleMouseClick);
             canvas.addEventListener('mousedown', mouseDown, true);
             canvas.addEventListener('mousemove', mouseMove, true);
             canvas.addEventListener('mouseup', mouseUp, true);
         }
+        return false;
     };
 
     // get the initial click moment and check it this click is on a dot
@@ -80,6 +84,7 @@
         var mouseY = mouse.y;
         var shapes = info.points;
         var l = shapes.length;
+
         for (var i = l - 2; i >= 0; i--) {
 
             if (shapes[i].contains(mouseX, mouseY)) {
@@ -109,7 +114,9 @@
             selection.y = mouse.y - dragoffy;
 
             updateView(selection, updatePoint);
+
         }
+        return false;
     };
 
     // stop view updates
@@ -123,64 +130,46 @@
         info.points[index] = newPoint;
 
         for(let i = 0; i < info.points.length - 1; i++) {
-            drawPoint(info.points[i].x, info.points[i].y, pointRadius, pointColor);
+            circle(info.points[i].x, info.points[i].y, pointRadius, pointColor);
+            context.fill();
             context.fillText(i + 1, info.points[i].x, info.points[i].y - textPos, 80);
         }
 
-        context.strokeStyle = blue;
-        context.beginPath();
-        context.moveTo(info.points[0].x, info.points[0].y);
-        context.lineTo(info.points[1].x, info.points[1].y);
-        context.lineTo(info.points[2].x, info.points[2].y);
-        context.lineTo(info.points[3].x, info.points[3].y);
-        context.closePath();
-        context.lineWidth = 3;
-        context.stroke();
-
-        info.parallelogram = createInfo(info.points);
-        drawCircle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
-
+        parallelogram(info.points, blue);
     };
 
     // Draw
-    const drawParallelogram = (points) => {
-        points.push({
-            x: points[0].x + points[2].x - points[1].x,
-            y: points[0].y + points[2].y - points[1].y,
-        });
+    const parallelogram = (points, color ) => {
+        if(points.length === 3){
+            points.push({
+                x: points[0].x + points[2].x - points[1].x,
+                y: points[0].y + points[2].y - points[1].y,
+            });
+        }
 
-        context.strokeStyle = blue;
+        context.strokeStyle = color;
         context.beginPath();
         context.moveTo(points[0].x, points[0].y);
         context.lineTo(points[1].x, points[1].y);
         context.lineTo(points[2].x, points[2].y);
         context.lineTo(points[3].x, points[3].y);
         context.closePath();
-        context.lineWidth = 3;
         context.stroke();
 
         info.parallelogram = createInfo(info.points);
-        drawCircle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
+        circle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
+        context.lineWidth = 3;
     };
 
-    const drawCircle = (cx, cy, radius, color) => {
-        context.strokeStyle = color;
-        context.beginPath();
-        context.arc(cx, cy, radius, 0, Math.PI * 2, true);
-        context.stroke();
-        info.circle = {
-            area: (Math.PI * Math.pow(radius, 2)).toFixed(),
-        };
-
-        showInfo(info);
-    };
-
-    const drawPoint = (cx, cy, radius, color) => {
+    const circle = (cx, cy, radius, color) => {
         context.fillStyle = color;
         context.beginPath();
         context.arc(cx, cy, radius, 0, Math.PI * 2, true);
-        context.fill();
-    };
+               context.stroke();
+        return {
+            area: (Math.PI * Math.pow(radius, 2)).toFixed(),
+        }
+    }
 
     // Info
     const createInfo = (points) => {
@@ -231,6 +220,7 @@
         delete info.parallelogram;
         delete info.circle;
         clearInfo();
+
         canvas.removeEventListener('mousedown', mouseDown, true);
         canvas.removeEventListener('mousemove', mouseMove, true);
         canvas.removeEventListener('mouseup', mouseUp, true);
