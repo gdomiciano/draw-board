@@ -1,4 +1,94 @@
 {
+    class Shape {
+        constructor(color, position, size) {
+            // code
+            this.color = color;
+            this.position = position;
+            this.size = size;
+        }
+
+        // methods
+
+        // Getters
+        getArea() {return this.setArea();}
+        getInfo() {return this.setInfo();}
+
+        // Setters
+        setArea() {return 0};
+        setInfo() {return {}};
+
+        // Actions
+        drawShape() {}
+    }
+
+    class Parallelogram extends Shape {
+        drawShape() {
+        const points = this.position.points;
+            points.push({
+                x: points[0].x + points[2].x - points[1].x,
+                y: points[0].y + points[2].y - points[1].y,
+            });
+
+            context.strokeStyle = this.color;
+            context.beginPath();
+            context.moveTo(points[0].x, points[0].y);
+            context.lineTo(points[1].x, points[1].y);
+            context.lineTo(points[2].x, points[2].y);
+            context.lineTo(points[3].x, points[3].y);
+            context.closePath();
+            context.lineWidth = 3;
+            context.stroke();
+        };
+
+        setInfo() {
+            const points = this.position.points;
+            centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
+            centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
+            base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
+            area = this.getArea();
+            height = area / base;
+            radius = (height/2).toFixed();
+            return {
+                centerX,
+                centerY,
+                base,
+                AC,
+                BD,
+                area,
+                height,
+                radius,
+                points,
+            };
+        }
+
+        setArea() {
+            const points = this.position.points;
+            AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
+            BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
+            area = ((AC * BD)/2).toFixed();
+            return area;
+        }
+    }
+
+        // Draw
+    const parallelogram = (points, color ) => {
+
+
+        info.parallelogram = createInfo(info.points);
+        circle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
+        context.lineWidth = 3;
+    };
+
+    const circle = (cx, cy, radius, color) => {
+        context.fillStyle = color;
+        context.beginPath();
+        context.arc(cx, cy, radius, 0, Math.PI * 2, true);
+               context.stroke();
+        // return {
+        //     area: (Math.PI * Math.pow(radius, 2)).toFixed(),
+        // }
+    }
+
     // General vars
     const board = document.querySelector('.Board');
     const resetButton = document.querySelector('.Button--reset');
@@ -8,7 +98,7 @@
     const yellow = '#FECB00';
     const pointRadius = 5.5;
     const pointColor = '#FF0000';
-    const textPos = 15;
+    const textPosition = 15;
 
     // Vars for calc
     let centerX = null;
@@ -22,7 +112,7 @@
 
     // Var for Info
     const info = {
-        points: []
+        points: [],
     };
 
     // Vars for draggable elements
@@ -64,10 +154,13 @@
             });
             circle(position.x, position.y, pointRadius, pointColor);
             context.fill();
-            context.fillText(info.points.length, position.x, position.y - textPos, 80);
+            context.fillText(info.points.length, position.x, position.y - textPosition, 80);
         }
         if (info.points.length === 3) {
-            parallelogram(info.points, blue);
+            const parallelogram = new Parallelogram(blue, {points:info.points}, null);
+            parallelogram.drawShape();
+            //REfatorar
+            info.parallelogram = parallelogram.getInfo();
 
             canvas.removeEventListener('mousedown', handleMouseClick);
             canvas.addEventListener('mousedown', mouseDown, true);
@@ -132,66 +225,16 @@
         for(let i = 0; i < info.points.length - 1; i++) {
             circle(info.points[i].x, info.points[i].y, pointRadius, pointColor);
             context.fill();
-            context.fillText(i + 1, info.points[i].x, info.points[i].y - textPos, 80);
+            context.fillText(i + 1, info.points[i].x, info.points[i].y - textPosition, 80);
         }
+        const parallelogram = new Parallelogram(blue, {points:info.points}, null);
+        parallelogram.drawShape();
 
-        parallelogram(info.points, blue);
+        // parallelogram(info.points, blue);
     };
 
-    // Draw
-    const parallelogram = (points, color ) => {
-        if(points.length === 3){
-            points.push({
-                x: points[0].x + points[2].x - points[1].x,
-                y: points[0].y + points[2].y - points[1].y,
-            });
-        }
-
-        context.strokeStyle = color;
-        context.beginPath();
-        context.moveTo(points[0].x, points[0].y);
-        context.lineTo(points[1].x, points[1].y);
-        context.lineTo(points[2].x, points[2].y);
-        context.lineTo(points[3].x, points[3].y);
-        context.closePath();
-        context.stroke();
-
-        info.parallelogram = createInfo(info.points);
-        circle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
-        context.lineWidth = 3;
-    };
-
-    const circle = (cx, cy, radius, color) => {
-        context.fillStyle = color;
-        context.beginPath();
-        context.arc(cx, cy, radius, 0, Math.PI * 2, true);
-               context.stroke();
-        return {
-            area: (Math.PI * Math.pow(radius, 2)).toFixed(),
-        }
-    }
 
     // Info
-    const createInfo = (points) => {
-        centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
-        centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
-        base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
-        AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
-        BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
-        area = ((AC * BD)/2).toFixed();
-        height = area / base;
-        radius = (height/2).toFixed();
-        return {
-            centerX: centerX,
-            centerY: centerY,
-            base: base,
-            AC: AC,
-            BD: BD,
-            area: area,
-            height: height,
-            radius: radius,
-        };
-    };
 
     const showInfo = () => {
         document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
