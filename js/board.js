@@ -1,15 +1,12 @@
 {
     class Shape {
-        constructor(color, position, size) {
+        constructor(color, position) {
             // code
             this.color = color;
             this.position = position;
-            this.size = size;
         }
 
-        // methods
-
-        // Getters
+         // Getters
         getArea() {return this.setArea();}
         getInfo() {return this.setInfo();}
 
@@ -23,11 +20,13 @@
 
     class Parallelogram extends Shape {
         drawShape() {
-        const points = this.position.points;
-            points.push({
-                x: points[0].x + points[2].x - points[1].x,
-                y: points[0].y + points[2].y - points[1].y,
-            });
+            const points = this.position.points
+            if(points.length === 3){
+                points.push({
+                    x: points[0].x + points[2].x - points[1].x,
+                    y: points[0].y + points[2].y - points[1].y,
+                });
+            }
 
             context.strokeStyle = this.color;
             context.beginPath();
@@ -42,18 +41,19 @@
 
         setInfo() {
             const points = this.position.points;
-            centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
-            centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
-            base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
-            area = this.getArea();
-            height = area / base;
-            radius = (height/2).toFixed();
+            const centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
+            const centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
+            const base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
+            const area = this.getArea();
+            const height = area / base;
+            const radius = (height / 2).toFixed();
+
             return {
-                centerX,
-                centerY,
+                center: {
+                    x: centerX,
+                    y: centerY,
+                },
                 base,
-                AC,
-                BD,
                 area,
                 height,
                 radius,
@@ -63,30 +63,45 @@
 
         setArea() {
             const points = this.position.points;
-            AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
-            BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
-            area = ((AC * BD)/2).toFixed();
+            const AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
+            const BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
+            const area = ((AC * BD)/2).toFixed();
             return area;
         }
     }
 
-        // Draw
-    const parallelogram = (points, color ) => {
+    class Circle extends Shape {
+        constructor(color, position, size, stroke, fill) {
+            // code
+            super(color, position);
+            this.radius = size;
+            this.stroke = stroke;
+            this.fill = fill;
+        }
 
+        // methods
 
-        info.parallelogram = createInfo(info.points);
-        circle(info.parallelogram.centerX, info.parallelogram.centerY, info.parallelogram.radius, yellow);
-        context.lineWidth = 3;
-    };
+        drawShape(){
+            context.beginPath();
+            context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
 
-    const circle = (cx, cy, radius, color) => {
-        context.fillStyle = color;
-        context.beginPath();
-        context.arc(cx, cy, radius, 0, Math.PI * 2, true);
-               context.stroke();
-        // return {
-        //     area: (Math.PI * Math.pow(radius, 2)).toFixed(),
-        // }
+            if (this.stroke) {
+                context.strokeStyle = this.color;
+                context.lineWidth = 3;
+                context.stroke();
+            }
+
+            if (this.fill) {
+                context.fillStyle = this.color;
+                context.fill();
+            }
+        }
+        setArea() {
+            return (Math.PI * Math.pow(size, 2)).toFixed();
+        }
+        setInfo() {
+            return {area:this.getArea};
+        }
     }
 
     // General vars
@@ -96,19 +111,10 @@
     const context = canvas.getContext('2d');
     const blue = '#005293';
     const yellow = '#FECB00';
-    const pointRadius = 5.5;
-    const pointColor = '#FF0000';
+    const dotRadius = 5.5;
+    const red = '#FF0000';
     const textPosition = 15;
 
-    // Vars for calc
-    let centerX = null;
-    let centerY = null;
-    let base = null;
-    let AC = null;
-    let BD = null;
-    let area = null;
-    let height = null;
-    let radius = null;
 
     // Var for Info
     const info = {
@@ -152,8 +158,8 @@
                 x: position.x,
                 y: position.y,
             });
-            circle(position.x, position.y, pointRadius, pointColor);
-            context.fill();
+            const dot = new Circle(red, position, dotRadius, false, true);
+            dot.drawShape();
             context.fillText(info.points.length, position.x, position.y - textPosition, 80);
         }
         if (info.points.length === 3) {
@@ -161,6 +167,8 @@
             parallelogram.drawShape();
             //REfatorar
             info.parallelogram = parallelogram.getInfo();
+            const innerCircle = new Circle(yellow, info.parallelogram.center, info.parallelogram.radius, true, false);
+            innerCircle.drawShape();
 
             canvas.removeEventListener('mousedown', handleMouseClick);
             canvas.addEventListener('mousedown', mouseDown, true);
