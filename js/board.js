@@ -5,16 +5,12 @@
             this.color = color;
             this.position = position;
         }
-
-         // Getters
         getArea() {return this.setArea();}
         getInfo() {return this.setInfo();}
 
-        // Setters
         setArea() {return 0};
         setInfo() {return {}};
 
-        // Actions
         drawShape() {}
     }
 
@@ -143,7 +139,6 @@
     const dotRadius = 5.5;
     const red = '#FF0000';
     const textPosition = 15;
-    const points = [];
 
     // Vars for draggable elements
     let dragging = false;
@@ -151,6 +146,9 @@
     let dragoffx = 0;
     let dragoffy = 0;
     let updatePoint = null;
+
+    let points = [];
+    let information = null;
 
 
     // User Interaction
@@ -188,35 +186,31 @@
     };
 
     // get the mouse movement and call function to update the coordinates
-    const mouseMove = (e) => {
+    const mouseMove = function(e) {
         if (dragging) {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
-            var mouse = getMousePosition(e);
+            const mouse = getMousePosition(e);
 
             selection.x = mouse.x - dragoffx;
             selection.y = mouse.y - dragoffy;
 
-            console.log('Move',updatePoint, selection)
             updateView(selection, updatePoint);
-
         }
-        return false;
     };
 
     // stop view updates
-    const mouseUp = (e) => {
+    const mouseUp = function(e) {
         dragging = false;
     };
 
-    // redraw everything into the canvas accordingly user's drag movement, clear and update the information
-    const updateView = () => {
-
+    const updateView = function() {
         context.clearRect(0, 0, canvas.width, canvas.height)
+
         const parallelogram = new Parallelogram(blue, {points}, null);
         parallelogram.drawShape();
 
-        for (var i = points.length - 2; i >= 0; i--) {
+        for (let i = points.length - 2; i >= 0; i--) {
             const dot = new Circle(red, points[i], dotRadius, false, true);
             dot.drawShape();
             context.fillText(i+1, points[i].x, points[i].y - textPosition, 80);
@@ -228,25 +222,20 @@
         innerCircle.drawShape();
 
         info = {...info, circle: innerCircle.getInfo() }
-        const information = new Info(info);
+        information = new Info(info);
         information.render();
-
-        return information;
     };
 
 
     // Reset
     const resetBoard = () => {
         context.clearRect(0, 0, canvas.width, canvas.height);
-        info.points.length = 0;
-        delete info.parallelogram;
-        delete info.circle;
-        clearInfo();
-
+        information.clear();
+        points = [];
         canvas.removeEventListener('mousedown', mouseDown, true);
         canvas.removeEventListener('mousemove', mouseMove, true);
         canvas.removeEventListener('mouseup', mouseUp, true);
-        canvas.addEventListener('mousedown', handleMouseClick);
+        canvas.addEventListener('click', handleMouseClick);
     };
 
     // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
@@ -259,8 +248,6 @@
             });
             const dot = new Circle(red, position, dotRadius, false, true);
             dot.drawShape();
-
-            // who is responsible for the text?
             context.fillText(points.length, position.x, position.y - textPosition, 80);
         }
 
