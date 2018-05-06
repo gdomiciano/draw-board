@@ -21,7 +21,7 @@
     class Parallelogram extends Shape {
         drawShape() {
             const points = this.position.points
-            if(points.length === 3){
+            if (points.length === 3) {
                 points.push({
                     x: points[0].x + points[2].x - points[1].x,
                     y: points[0].y + points[2].y - points[1].y,
@@ -59,7 +59,7 @@
                 radius,
                 points,
             };
-        }
+        };
 
         setArea() {
             const points = this.position.points;
@@ -67,21 +67,18 @@
             const BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
             const area = ((AC * BD)/2).toFixed();
             return area;
-        }
-    }
+        };
+    };
 
     class Circle extends Shape {
         constructor(color, position, size, stroke, fill) {
-            // code
             super(color, position);
             this.radius = size;
             this.stroke = stroke;
             this.fill = fill;
-        }
+        };
 
-        // methods
-
-        drawShape(){
+        drawShape() {
             context.beginPath();
             context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2, true);
 
@@ -95,14 +92,46 @@
                 context.fillStyle = this.color;
                 context.fill();
             }
-        }
-        setArea() {
-            return (Math.PI * Math.pow(size, 2)).toFixed();
-        }
+        };
+
         setInfo() {
-            return {area:this.getArea};
+            return {area: this.getArea()};
+        };
+
+        setArea() {
+            return (Math.PI * Math.pow(this.radius, 2)).toFixed();
+        };
+    };
+
+    class Info {
+        constructor(info) {
+            this.info = info;
+        }
+
+        render() {
+            document.querySelector('.Info-content--pointOne').textContent = `${this.info.parallelogram.points[0].x}, ${this.info.parallelogram.points[0].y}`;
+            document.querySelector('.Info-content--pointTwo').textContent = `${this.info.parallelogram.points[1].x}, ${this.info.parallelogram.points[1].y}`;
+            document.querySelector('.Info-content--pointThree').textContent = `${this.info.parallelogram.points[2].x}, ${this.info.parallelogram.points[2].y}`;
+            document.querySelector('.Info-content--parallelogramArea').textContent = `Parallelogram: ${this.info.parallelogram.area}`;
+            document.querySelector('.Info-content--circleArea').textContent = `Circle: ${this.info.circle.area}`;
+            document.querySelector('.Info-none').classList.add('u-hidden');
+            document.querySelector('.Info-content').classList.remove('u-hidden');
+        }
+
+        clear() {
+            document.querySelector('.Info-none').classList.remove('u-hidden');
+            document.querySelector('.Info-content').classList.add('u-hidden');
+            document.querySelector('.Info-content--pointOne').textContent = '';
+            document.querySelector('.Info-content--pointTwo').textContent = '';
+            document.querySelector('.Info-content--pointThree').textContent = '';
+            document.querySelector('.Info-content--parallelogramArea').textContent = 'Parallelogram: ';
+            document.querySelector('.Info-content--circleArea').textContent = 'Circle: ';
         }
     }
+
+    Object.prototype.containDot = function(mouseX, mouseY) {
+        return (this.x <= mouseX) && (this.x + dotRadius * 2 >= mouseX) && (this.y <= mouseY) && (this.y + dotRadius * 2 >= mouseY);
+    };
 
     // General vars
     const board = document.querySelector('.Board');
@@ -114,12 +143,7 @@
     const dotRadius = 5.5;
     const red = '#FF0000';
     const textPosition = 15;
-
-
-    // Var for Info
-    const info = {
-        points: [],
-    };
+    const points = [];
 
     // Vars for draggable elements
     let dragging = false;
@@ -128,20 +152,12 @@
     let dragoffy = 0;
     let updatePoint = null;
 
-    // SetUp Board
-    canvas.width = board.clientWidth || board.offsetWidth;
-    canvas.height = board.clientHeight || board.offsetHeight;
-
-    // Check if click coordnates contain a dot
-    Object.prototype.contains = function(mouseX, mouseY) {
-        return (this.x <= mouseX) && (this.x + pointRadius * 2 >= mouseX) && (this.y <= mouseY) && (this.y + pointRadius * 2 >= mouseY);
-    };
 
     // User Interaction
     // Gets the mouse position acording to the event it was called
-    const getMouse = (e) => {
-        let x = e.pageX || e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
-        let y = e.pageY || e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+    const getMousePosition = (e) => {
+        let x = e.pageX || e.clientX || e.x;
+        let y = e.pageY || e.clientY || e.y;
 
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
@@ -149,59 +165,26 @@
         return {x: x, y: y};
     };
 
-    // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
-    const handleMouseClick = (e) => {
-        const position = getMouse(e);
-
-        if(info.points.length <= 3){
-            info.points.push({
-                x: position.x,
-                y: position.y,
-            });
-            const dot = new Circle(red, position, dotRadius, false, true);
-            dot.drawShape();
-            context.fillText(info.points.length, position.x, position.y - textPosition, 80);
-        }
-        if (info.points.length === 3) {
-            const parallelogram = new Parallelogram(blue, {points:info.points}, null);
-            parallelogram.drawShape();
-            //REfatorar
-            info.parallelogram = parallelogram.getInfo();
-            const innerCircle = new Circle(yellow, info.parallelogram.center, info.parallelogram.radius, true, false);
-            innerCircle.drawShape();
-
-            canvas.removeEventListener('mousedown', handleMouseClick);
-            canvas.addEventListener('mousedown', mouseDown, true);
-            canvas.addEventListener('mousemove', mouseMove, true);
-            canvas.addEventListener('mouseup', mouseUp, true);
-        }
-        return false;
-    };
-
     // get the initial click moment and check it this click is on a dot
-    const mouseDown = (e) => {
-        var mouse = getMouse(e);
-        var mouseX = mouse.x;
-        var mouseY = mouse.y;
-        var shapes = info.points;
-        var l = shapes.length;
+    const mouseDown = function(e) {
+        const mouse = getMousePosition(e);
+        const mouseX = mouse.x;
+        const mouseY = mouse.y;
 
-        for (var i = l - 2; i >= 0; i--) {
+        for (let i = points.length - 2; i >= 0; i--) {
 
-            if (shapes[i].contains(mouseX, mouseY)) {
-                var mySel = shapes[i];
+            if (points[i].containDot(mouseX, mouseY)) {
+                const dot = points[i];
                 updatePoint = i;
-                dragoffx = mouseX - mySel.x;
-                dragoffy = mouseY - mySel.y;
+                dragoffx = mouseX - dot.x;
+                dragoffy = mouseY - dot.y;
                 dragging = true;
-                selection = mySel;
+                selection = dot;
                 return;
             }
         }
 
-        if (selection) {
-            selection = null;
-        }
+        if (selection) selection = null;
     };
 
     // get the mouse movement and call function to update the coordinates
@@ -209,11 +192,12 @@
         if (dragging) {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
-            var mouse = getMouse(e);
+            var mouse = getMousePosition(e);
 
             selection.x = mouse.x - dragoffx;
             selection.y = mouse.y - dragoffy;
 
+            console.log('Move',updatePoint, selection)
             updateView(selection, updatePoint);
 
         }
@@ -226,43 +210,30 @@
     };
 
     // redraw everything into the canvas accordingly user's drag movement, clear and update the information
-    const updateView = (newPoint, index) => {
-        clearInfo();
-        info.points[index] = newPoint;
+    const updateView = () => {
 
-        for(let i = 0; i < info.points.length - 1; i++) {
-            circle(info.points[i].x, info.points[i].y, pointRadius, pointColor);
-            context.fill();
-            context.fillText(i + 1, info.points[i].x, info.points[i].y - textPosition, 80);
-        }
-        const parallelogram = new Parallelogram(blue, {points:info.points}, null);
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        const parallelogram = new Parallelogram(blue, {points}, null);
         parallelogram.drawShape();
 
-        // parallelogram(info.points, blue);
+        for (var i = points.length - 2; i >= 0; i--) {
+            const dot = new Circle(red, points[i], dotRadius, false, true);
+            dot.drawShape();
+            context.fillText(i+1, points[i].x, points[i].y - textPosition, 80);
+        };
+
+        let info = { parallelogram: parallelogram.getInfo() };
+
+        const innerCircle = new Circle(yellow, info.parallelogram.center, info.parallelogram.radius, true, false);
+        innerCircle.drawShape();
+
+        info = {...info, circle: innerCircle.getInfo() }
+        const information = new Info(info);
+        information.render();
+
+        return information;
     };
 
-
-    // Info
-
-    const showInfo = () => {
-        document.querySelector('.Info-content--pointOne').textContent = `${info.points[0].x}, ${info.points[0].y}`;
-        document.querySelector('.Info-content--pointTwo').textContent = `${info.points[1].x}, ${info.points[1].y}`;
-        document.querySelector('.Info-content--pointThree').textContent = `${info.points[2].x}, ${info.points[2].y}`;
-        document.querySelector('.Info-content--parallelogramArea').textContent += ` ${info.parallelogram.area}`;
-        document.querySelector('.Info-content--circleArea').textContent += ` ${info.circle.area}`;
-        document.querySelector('.Info-none').classList.add('u-hidden');
-        document.querySelector('.Info-content').classList.remove('u-hidden');
-    };
-
-    const clearInfo = () => {
-        document.querySelector('.Info-none').classList.remove('u-hidden');
-        document.querySelector('.Info-content').classList.add('u-hidden');
-        document.querySelector('.Info-content--pointOne').textContent = '';
-        document.querySelector('.Info-content--pointTwo').textContent = '';
-        document.querySelector('.Info-content--pointThree').textContent = '';
-        document.querySelector('.Info-content--parallelogramArea').textContent = 'Parallelogram: ';
-        document.querySelector('.Info-content--circleArea').textContent = 'Circle: ';
-    };
 
     // Reset
     const resetBoard = () => {
@@ -276,9 +247,39 @@
         canvas.removeEventListener('mousemove', mouseMove, true);
         canvas.removeEventListener('mouseup', mouseUp, true);
         canvas.addEventListener('mousedown', handleMouseClick);
-
     };
 
-    canvas.addEventListener('mousedown', handleMouseClick);
-    resetButton.addEventListener('mousedown', resetBoard);
+    // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
+    const handleMouseClick = function(e) {
+        const position = getMousePosition(e);
+        if(points.length <= 3){
+            points.push({
+                x: position.x,
+                y: position.y,
+            });
+            const dot = new Circle(red, position, dotRadius, false, true);
+            dot.drawShape();
+
+            // who is responsible for the text?
+            context.fillText(points.length, position.x, position.y - textPosition, 80);
+        }
+
+        if (points.length === 3) {
+            canvas.removeEventListener('click', handleMouseClick);
+            updateView();
+            canvas.addEventListener('mousedown', mouseDown, true);
+            canvas.addEventListener('mousemove', mouseMove, true);
+            canvas.addEventListener('mouseup', mouseUp, true);
+        }
+    };
+
+    const initBoard = function() {
+        canvas.width = board.clientWidth || board.offsetWidth;
+        canvas.height = board.clientHeight || board.offsetHeight;
+
+        canvas.addEventListener('click', handleMouseClick);
+        resetButton.addEventListener('click', resetBoard);
+    };
+
+    initBoard();
 }
