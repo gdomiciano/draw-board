@@ -195,7 +195,7 @@
             selection.x = mouse.x - dragOffX;
             selection.y = mouse.y - dragOffY;
 
-            updateView(selection, updatePoint);
+            updateScreen(selection, updatePoint);
         }
     };
 
