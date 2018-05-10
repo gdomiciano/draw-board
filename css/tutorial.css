@@ -1,3 +1,7 @@
+.TutorialPage-title--brand {
+  font-family: 'Megrim', cursive;
+}
+
 .TutorialPage-intro  {
     text-align: center;
     margin-bottom: 40px;
@@ -12,10 +16,8 @@
     list-style: inside decimal;
 }
 
-
 @media screen and (max-width: 768px) {
     .TutorialPage-list {
         width: 80%;
     }
-
 }

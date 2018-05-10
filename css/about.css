@@ -9,9 +9,9 @@
 
 .AboutPage-item {
     display: inline-block;
-    width: 20%;
     list-style: none;
     text-align: center;
+    width: 20%;
 }
 
 .AboutPage-toolsList {

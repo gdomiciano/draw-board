@@ -130,7 +130,6 @@
     };
 
     // General vars
-    const board = document.querySelector('.Board');
     const resetButton = document.querySelector('.Button--reset');
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
@@ -261,8 +260,8 @@
     };
 
     const initBoard = function() {
-        canvas.width = board.clientWidth || board.offsetWidth;
-        canvas.height = board.clientHeight || board.offsetHeight;
+        canvas.width = window.screen.availWidth;
+        canvas.height = window.screen.availHeight;
 
         canvas.addEventListener('click', handleMouseClick);
         resetButton.addEventListener('click', resetBoard);

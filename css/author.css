@@ -3,14 +3,14 @@
 }
 
 .AuthorPage-list {
-    overflow: hidden
+    overflow: hidden;
 }
 
 .AuthorPage-item--social {
     float: left;
-    width: 20%;
     list-style: none;
     text-align: center;
+    width: 20%;
 }
 
 .AuthorPage-item--image {

@@ -21,65 +21,27 @@ li {
     line-height: 25px;
 }
 
-[class*="brand"]{
-    font-family: 'Megrim', cursive;
-    font-size: 60px
-}
-
-[class*="title"] {
-    font-weight: 700;
-    font-size: 26px;
-    line-height: 40px;
-}
-
-[class$="--wrap"] {
-    width: 58%;
-    margin: 40px auto;
-}
-
-[class$="-list"] {
-    margin: 0px auto 40px;
-}
-
-[class*="Page-title"] {
-    font-size: 50px;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-[class^="Button"] {
-    background-color: red;
-    bottom: 20px;
-    border: none;
-    border-radius: 10px;
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 40px;
-    text-align: center;
-    display: block;
-}
-
 .u-hidden {
     display: none;
 }
 
 .is-active {
-    box-shadow: #999 0px 0px 30px;
+    box-shadow: #999 0 0 30px;
 }
 
 .Header {
-    width: 100%;
-    background-color: #cccccc;
-    border-bottom: 1px #999999 solid;
+    background-color: #ccc;
+    border-bottom: 1px #999 solid;
+    height: 80px;
     padding: 10px;
-    max-height: 80px;
+    width: 100%;
 }
 
 .Header-brand {
+    color: #333;
     display: inline-block;
-    color:#333;
+    font-family: 'Megrim', cursive;
+    font-size: 60px
 }
 
 .Header-logo {
@@ -117,9 +79,55 @@ li {
     vertical-align: middle;
 }
 
+.Info-title,
+.Info-title--points,
+.Info-title--Areas {
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 40px;
+}
+
+.AboutPage--wrap,
+.AuthorPage--wrap,
+.TutorialPage--wrap {
+    width: 58%;
+    margin: 40px auto;
+}
+
+.AboutPage-title,
+.AuthorPage-title,
+.TutorialPage-title {
+    font-size: 50px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+.Aboutpage-list,
+.AuthorPage-list,
+.Info-content--list,
+.TutorialPage-list {
+    margin: 0 auto 40px;
+}
+
+.Button--back,
+.Button--reset {
+    background-color: red;
+    bottom: 20px;
+    border: none;
+    border-radius: 10px;
+    color: #ffffff;
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 40px;
+    text-align: center;
+}
+
 .Button--back{
     width: 250px;
-    margin: 0px auto;
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 768px) {
@@ -132,21 +140,13 @@ li {
         line-height: 35px;
     }
 
-    [class*="brand"]{
-        font-size: 38px;
-    }
-
-    [class*="title"] {
-        font-size: 35px;
-    }
-
-    [class$="--wrap"] {
-        width: 80%;
-    }
-
     .Header {
         max-height: 60px;
         padding: 5px;
+    }
+
+    .Header-brand {
+        font-size: 38px;
     }
 
     .Navigation-item {
@@ -158,6 +158,18 @@ li {
 
     .Navigation-item--icon {
         width: 24px;
+    }
+
+    .Info-title,
+    .Info-title--points,
+    .Info-title--Areas {
+        font-size: 35px;
+    }
+
+    .AboutPage--wrap,
+    .AuthorPage--wrap,
+    .TutorialPage--wrap {
+        width: 80%;
     }
 }
 
@@ -171,17 +183,13 @@ li {
         line-height: 30px;
     }
 
-    [class*="brand"]{
-        font-size: 34px;
-    }
-
-    [class*="title"] {
-        font-size: 25px;
-    }
-
     .Header {
         max-height: 60px;
         padding: 5px;
+    }
+
+    .Header-brand{
+        font-size: 34px;
     }
 
     .Navigation-item--link {
@@ -190,6 +198,12 @@ li {
 
     .Navigation-item--icon {
         width: 20px;
+    }
+
+    .Info-title,
+    .Info-title--points,
+    .Info-title--Areas {
+        font-size: 25px;
     }
 }
 

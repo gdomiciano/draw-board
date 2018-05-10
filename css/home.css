@@ -10,11 +10,12 @@
     margin-bottom: 25px;
 }
 
-li[class^="Info-content"] {
+.Info-content,
+.Info-content--list {
     list-style: inside none;
 }
 
-li[class^="Info-content--point"] {
+[class^="Info-content--point"] {
     list-style-type: decimal;
 }
 
