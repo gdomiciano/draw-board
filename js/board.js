@@ -5,13 +5,13 @@
             this.color = color;
             this.position = position;
         }
-        getArea() {return this.setArea();}
-        getInfo() {return this.setInfo();}
 
-        setArea() {return 0};
-        setInfo() {return {}};
+        get area() { return this.calcArea() };
+        get shapeInfo() { return this.defineShapeInfo() };
 
         drawShape() {}
+        calcArea() { return 0 };
+        defineShapeInfo() { return {} };
     }
 
     class Parallelogram extends Shape {
@@ -35,12 +35,20 @@
             context.stroke();
         };
 
-        setInfo() {
+        calcArea() {
+            const points = this.position.points;
+            const AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
+            const BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
+            const area = ((AC * BD)/2).toFixed();
+            return area;
+        };
+
+        defineShapeInfo() {
             const points = this.position.points;
             const centerX = (points[0].x + points[1].x + points[2].x + points[3].x) / 4;
             const centerY = (points[0].y + points[1].y + points[2].y + points[3].y) / 4;
             const base = Math.max(Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2)), Math.sqrt(Math.pow((points[1].x - points[0].x), 2) + Math.pow((points[1].y - [points[0].y]), 2)));
-            const area = this.getArea();
+            const area = this.calcArea();
             const height = area / base;
             const radius = (height / 2).toFixed();
 
@@ -55,14 +63,6 @@
                 radius,
                 points,
             };
-        };
-
-        setArea() {
-            const points = this.position.points;
-            const AC = Math.sqrt(Math.pow((points[3].x - points[0].x), 2) + Math.pow((points[3].y - [points[0].y]), 2));
-            const BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
-            const area = ((AC * BD)/2).toFixed();
-            return area;
         };
     };
 
@@ -90,11 +90,11 @@
             }
         };
 
-        setInfo() {
-            return {area: this.getArea()};
+        defineShapeInfo() {
+            return { area: this.calcArea() };
         };
 
-        setArea() {
+        calcArea() {
             return (Math.PI * Math.pow(this.radius, 2)).toFixed();
         };
     };
@@ -105,11 +105,15 @@
         }
 
         render() {
-            document.querySelector('.Info-content--pointOne').textContent = `${this.info.parallelogram.points[0].x}, ${this.info.parallelogram.points[0].y}`;
-            document.querySelector('.Info-content--pointTwo').textContent = `${this.info.parallelogram.points[1].x}, ${this.info.parallelogram.points[1].y}`;
-            document.querySelector('.Info-content--pointThree').textContent = `${this.info.parallelogram.points[2].x}, ${this.info.parallelogram.points[2].y}`;
-            document.querySelector('.Info-content--parallelogramArea').textContent = `Parallelogram: ${this.info.parallelogram.area}`;
-            document.querySelector('.Info-content--circleArea').textContent = `Circle: ${this.info.circle.area}`;
+            const pointElements = document.querySelectorAll('.Info-content--point');
+            const parallelogramPoints = this.info.parallelogram.points;
+            const parallelogram = this.info.parallelogram;
+            const circle = this.info.circle;
+
+            pointElements.forEach((pointEl, i) => pointEl.textContent = `${ parallelogramPoints[i].x }, ${ parallelogramPoints[i].y }`);
+
+            document.querySelector('.Info-content--parallelogramArea').textContent = `Parallelogram: ${ parallelogram.area }`;
+            document.querySelector('.Info-content--circleArea').textContent = `Circle: ${ circle.area }`;
             document.querySelector('.Info-none').classList.add('u-hidden');
             document.querySelector('.Info-content').classList.remove('u-hidden');
         }
@@ -117,9 +121,7 @@
         clear() {
             document.querySelector('.Info-none').classList.remove('u-hidden');
             document.querySelector('.Info-content').classList.add('u-hidden');
-            document.querySelector('.Info-content--pointOne').textContent = '';
-            document.querySelector('.Info-content--pointTwo').textContent = '';
-            document.querySelector('.Info-content--pointThree').textContent = '';
+            document.querySelector('.Info-content--point').textContent = '';
             document.querySelector('.Info-content--parallelogramArea').textContent = 'Parallelogram: ';
             document.querySelector('.Info-content--circleArea').textContent = 'Circle: ';
         }
@@ -159,7 +161,7 @@
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
 
-        return {x: x, y: y};
+        return { x: x, y: y };
     };
 
     // get the initial click moment and check it this click is on a dot
@@ -209,32 +211,21 @@
         const parallelogram = new Parallelogram(blue, {points}, null);
         parallelogram.drawShape();
 
-        for (let i = points.length - 2; i >= 0; i--) {
+        const len = points.length - 2;
+        for (let i = len; i >= 0; i--) {
             const dot = new Circle(red, points[i], dotRadius, false, true);
             dot.drawShape();
             context.fillText(i+1, points[i].x, points[i].y - textPosition, 80);
         };
 
-        let info = { parallelogram: parallelogram.getInfo() };
+        let info = { parallelogram: parallelogram.shapeInfo };
 
         const innerCircle = new Circle(yellow, info.parallelogram.center, info.parallelogram.radius, true, false);
         innerCircle.drawShape();
 
-        info = {...info, circle: innerCircle.getInfo() }
+        info = { ...info, circle: innerCircle.shapeInfo }
         information = new Info(info);
         information.render();
-    };
-
-
-    // Reset
-    const resetBoard = () => {
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        information.clear();
-        points = [];
-        canvas.removeEventListener('mousedown', mouseDown, true);
-        canvas.removeEventListener('mousemove', mouseMove, true);
-        canvas.removeEventListener('mouseup', mouseUp, true);
-        canvas.addEventListener('click', handleMouseClick);
     };
 
     // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
@@ -259,9 +250,23 @@
         }
     };
 
+    // Reset
+    const resetBoard = () => {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        information.clear();
+        points = [];
+        canvas.removeEventListener('mousedown', mouseDown, true);
+        canvas.removeEventListener('mousemove', mouseMove, true);
+        canvas.removeEventListener('mouseup', mouseUp, true);
+        canvas.addEventListener('click', handleMouseClick);
+    };
+
     const initBoard = function() {
-        canvas.width = window.screen.availWidth;
-        canvas.height = window.screen.availHeight;
+        const headerHeight = document.querySelector('.Header').clientHeight;
+        const infoSidebarWidth = document.querySelector('.Info').clientWidth;
+
+        canvas.width = window.screen.availWidth - infoSidebarWidth;
+        canvas.height = window.screen.availHeight - headerHeight;
 
         canvas.addEventListener('click', handleMouseClick);
         resetButton.addEventListener('click', resetBoard);

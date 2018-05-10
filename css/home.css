@@ -15,7 +15,7 @@
     list-style: inside none;
 }
 
-[class^="Info-content--point"] {
+.Info-content--point {
     list-style-type: decimal;
 }
 
@@ -29,8 +29,6 @@
 .Board {
     background-color: #eeeeee;
     display: inline-block;
-    width: 75%;
-    height: calc(100% - 80px);
 
     background-color: #f1f2f3;
     background-image:
