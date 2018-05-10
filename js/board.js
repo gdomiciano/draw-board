@@ -137,15 +137,14 @@
     const context = canvas.getContext('2d');
     const blue = '#005293';
     const yellow = '#FECB00';
-    const dotRadius = 5.5;
     const red = '#FF0000';
-    const textPosition = 15;
+    const dotRadius = 5.5;
 
     // Vars for draggable elements
-    let dragging = false;
+    let isDragging = false;
     let selection = null;
-    let dragoffx = 0;
-    let dragoffy = 0;
+    let dragOffX = 0;
+    let dragOffY = 0;
     let updatePoint = null;
 
     let points = [];
@@ -175,9 +174,9 @@
             if (points[i].containDot(mouseX, mouseY)) {
                 const dot = points[i];
                 updatePoint = i;
-                dragoffx = mouseX - dot.x;
-                dragoffy = mouseY - dot.y;
-                dragging = true;
+                dragOffX = mouseX - dot.x;
+                dragOffY = mouseY - dot.y;
+                isDragging = true;
                 selection = dot;
                 return;
             }
@@ -188,13 +187,13 @@
 
     // get the mouse movement and call function to update the coordinates
     const mouseMove = function(e) {
-        if (dragging) {
+        if (isDragging) {
 
             context.clearRect(0, 0, canvas.width, canvas.height);
             const mouse = getMousePosition(e);
 
-            selection.x = mouse.x - dragoffx;
-            selection.y = mouse.y - dragoffy;
+            selection.x = mouse.x - dragOffX;
+            selection.y = mouse.y - dragOffY;
 
             updateView(selection, updatePoint);
         }
@@ -202,10 +201,15 @@
 
     // stop view updates
     const mouseUp = function(e) {
-        dragging = false;
+        isDragging = false;
     };
 
-    const updateView = function() {
+    const writeDotNumber = function(number, position, size) {
+        const dotNumberPos = 15;
+        context.fillText(number, position.x, position.y - dotNumberPos, size);
+    }
+
+    const updateScreen = function() {
         context.clearRect(0, 0, canvas.width, canvas.height)
 
         const parallelogram = new Parallelogram(blue, {points}, null);
@@ -215,15 +219,13 @@
         for (let i = len; i >= 0; i--) {
             const dot = new Circle(red, points[i], dotRadius, false, true);
             dot.drawShape();
-            context.fillText(i+1, points[i].x, points[i].y - textPosition, 80);
+            writeDotNumber(i+1, points[i], 80);
         };
 
-        let info = { parallelogram: parallelogram.shapeInfo };
-
-        const innerCircle = new Circle(yellow, info.parallelogram.center, info.parallelogram.radius, true, false);
+        const innerCircle = new Circle(yellow, parallelogram.shapeInfo.center, parallelogram.shapeInfo.radius, true, false);
         innerCircle.drawShape();
 
-        info = { ...info, circle: innerCircle.shapeInfo }
+        const info = { parallelogram: parallelogram.shapeInfo , circle: innerCircle.shapeInfo }
         information = new Info(info);
         information.render();
     };
@@ -231,19 +233,18 @@
     // Call the mouse position, verify how many dots are in the screen, call the dots/parallelogram draw function. Manage events
     const handleMouseClick = function(e) {
         const position = getMousePosition(e);
+
         if(points.length <= 3){
-            points.push({
-                x: position.x,
-                y: position.y,
-            });
+            points.push({ x: position.x, y: position.y });
+
             const dot = new Circle(red, position, dotRadius, false, true);
             dot.drawShape();
-            context.fillText(points.length, position.x, position.y - textPosition, 80);
+            writeDotNumber(points.length, position, 80);
         }
 
         if (points.length === 3) {
             canvas.removeEventListener('click', handleMouseClick);
-            updateView();
+            updateScreen();
             canvas.addEventListener('mousedown', mouseDown, true);
             canvas.addEventListener('mousemove', mouseMove, true);
             canvas.addEventListener('mouseup', mouseUp, true);
@@ -262,7 +263,7 @@
     };
 
     const initBoard = function() {
-        const headerHeight = document.querySelector('.Header').clientHeight;
+        const headerHeight = document.querySelector('.Header').clientHeight * 2;
         const infoSidebarWidth = document.querySelector('.Info').clientWidth;
 
         canvas.width = window.screen.availWidth - infoSidebarWidth;
