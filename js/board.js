@@ -6,17 +6,17 @@
             this.position = position;
         }
 
-        get area() { return this.calcArea() };
-        get shapeInfo() { return this.defineShapeInfo() };
+        get area() { return this.calcArea(); }
+        get shapeInfo() { return this.defineShapeInfo(); }
 
         drawShape() {}
-        calcArea() { return 0 };
-        defineShapeInfo() { return {} };
+        calcArea() { return 0; }
+        defineShapeInfo() { return {}; }
     }
 
     class Parallelogram extends Shape {
         drawShape() {
-            const points = this.position.points
+            const points = this.position.points;
             if (points.length === 3) {
                 points.push({
                     x: points[0].x + points[2].x - points[1].x,
@@ -33,7 +33,7 @@
             context.closePath();
             context.lineWidth = 3;
             context.stroke();
-        };
+        }
 
         calcArea() {
             const points = this.position.points;
@@ -41,7 +41,7 @@
             const BD = Math.sqrt(Math.pow((points[2].x - points[1].x), 2) + Math.pow((points[2].y - [points[1].y]), 2));
             const area = ((AC * BD)/2).toFixed();
             return area;
-        };
+        }
 
         defineShapeInfo() {
             const points = this.position.points;
@@ -63,8 +63,8 @@
                 radius,
                 points,
             };
-        };
-    };
+        }
+    }
 
     class Circle extends Shape {
         constructor(color, position, size, stroke, fill) {
@@ -72,7 +72,7 @@
             this.radius = size;
             this.stroke = stroke;
             this.fill = fill;
-        };
+        }
 
         drawShape() {
             context.beginPath();
@@ -88,16 +88,16 @@
                 context.fillStyle = this.color;
                 context.fill();
             }
-        };
+        }
 
         defineShapeInfo() {
             return { area: this.calcArea() };
-        };
+        }
 
         calcArea() {
             return (Math.PI * Math.pow(this.radius, 2)).toFixed();
-        };
-    };
+        }
+    }
 
     class Info {
         constructor(info) {
@@ -160,7 +160,7 @@
         x -= canvas.offsetLeft;
         y -= canvas.offsetTop;
 
-        return { x: x, y: y };
+        return { x, y };
     };
 
     // get the initial click moment and check it this click is on a dot
@@ -207,10 +207,10 @@
     const writeDotNumber = function(number, position, size) {
         const dotNumberPos = 15;
         context.fillText(number, position.x, position.y - dotNumberPos, size);
-    }
+    };
 
     const updateScreen = function() {
-        context.clearRect(0, 0, canvas.width, canvas.height)
+        context.clearRect(0, 0, canvas.width, canvas.height);
 
         const parallelogram = new Parallelogram(blue, {points}, null);
         parallelogram.drawShape();
@@ -220,12 +220,12 @@
             const dot = new Circle(red, points[i], dotRadius, false, true);
             dot.drawShape();
             writeDotNumber(i+1, points[i], 80);
-        };
+        }
 
         const innerCircle = new Circle(yellow, parallelogram.shapeInfo.center, parallelogram.shapeInfo.radius, true, false);
         innerCircle.drawShape();
 
-        const info = { parallelogram: parallelogram.shapeInfo , circle: innerCircle.shapeInfo }
+        const info = { parallelogram: parallelogram.shapeInfo , circle: innerCircle.shapeInfo };
         information = new Info(info);
         information.render();
     };
